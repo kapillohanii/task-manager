@@ -12,8 +12,8 @@ import {
   Typography
 } from '@mui/material';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import KeyboardDoubleArrowUpSharpIcon from '@mui/icons-material/KeyboardDoubleArrowUpSharp';
+import KeyboardArrowUpSharpIcon from '@mui/icons-material/KeyboardArrowUpSharp';
 import { getColorByStatus } from '../constants';
 
 const getPriorityIcon = (priority) => {
@@ -21,9 +21,9 @@ const getPriorityIcon = (priority) => {
     case 'high':
       return <PriorityHighIcon color="error" />;
     case 'medium':
-      return <ArrowUpwardIcon color="warning" />;
+      return <KeyboardDoubleArrowUpSharpIcon color="warning" />;
     case 'low':
-      return <ArrowDownwardIcon color="success" />;
+      return <KeyboardArrowUpSharpIcon color="warning" />;
     default:
       return null;
   }
@@ -70,7 +70,7 @@ const RecentTasksTable = () => {
                 />
               </TableCell>
               <TableCell> 
-                {getPriorityIcon(row.priority)} {row.priority}
+                {getPriorityIcon(row.priority)}
               </TableCell>
               <TableCell>
                 <Chip
