@@ -8,11 +8,13 @@ import {
   TableRow, 
   Paper,
   Chip,
-  Avatar
+  Avatar,
+  Typography
 } from '@mui/material';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { getColorByStatus } from '../constants';
 
 const getPriorityIcon = (priority) => {
   switch(priority.toLowerCase()) {
@@ -27,31 +29,22 @@ const getPriorityIcon = (priority) => {
   }
 };
 
-const getStatusColor = (status) => {
-  switch(status.toLowerCase()) {
-    case 'completed':
-      return 'success';
-    case 'in progress':
-      return 'warning';
-    case 'not started':
-      return 'error';
-    default:
-      return 'default';
-  }
-};
 
 const mockData = [
-  { id: 1, title: 'Implement login functionality', createdBy: 'John Doe', priority: 'High', assignedTo: 'Alice Smith', status: 'In Progress' },
-  { id: 2, title: 'Design new landing page', createdBy: 'Jane Smith', priority: 'Medium', assignedTo: 'Bob Johnson', status: 'Not Started' },
+  { id: 1, title: 'Implement login functionality', createdBy: 'John Doe', priority: 'High', assignedTo: 'Alice Smith', status: 'Ongoing' },
+  { id: 2, title: 'Design new landing page', createdBy: 'Jane Smith', priority: 'Medium', assignedTo: 'Bob Johnson', status: 'To-Do' },
   { id: 3, title: 'Fix navigation bug', createdBy: 'Alice Smith', priority: 'Low', assignedTo: 'Charlie Brown', status: 'Completed' },
-  { id: 4, title: 'Update user documentation', createdBy: 'Bob Johnson', priority: 'Medium', assignedTo: 'David Wilson', status: 'In Progress' },
-  { id: 5, title: 'Optimize database queries', createdBy: 'Charlie Brown', priority: 'High', assignedTo: 'Eve Taylor', status: 'Not Started' },
+  { id: 4, title: 'Update user documentation', createdBy: 'Bob Johnson', priority: 'Medium', assignedTo: 'David Wilson', status: 'Ongoing' },
+  { id: 5, title: 'Optimize database queries', createdBy: 'Charlie Brown', priority: 'High', assignedTo: 'Eve Taylor', status: 'To-Do' },
 ];
 
 const RecentTasksTable = () => {
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="recent tasks table">
+    <TableContainer component={Paper} style={{marginLeft: '20px'}}>
+        <Typography variant="h6" component="div" margin={1}>
+          Recent Tasks
+        </Typography>
+      <Table sx={{ minWidth: 500  }} aria-label="recent tasks table">
         <TableHead>
           <TableRow>
             <TableCell>S.No</TableCell>
@@ -69,8 +62,14 @@ const RecentTasksTable = () => {
                 {index + 1}
               </TableCell>
               <TableCell>{row.title}</TableCell>
-              <TableCell>{row.createdBy}</TableCell>
               <TableCell>
+                <Chip
+                  avatar={<Avatar>{row.createdBy.charAt(0)}</Avatar>}
+                  label={row.createdBy}
+                  variant="outlined"
+                />
+              </TableCell>
+              <TableCell> 
                 {getPriorityIcon(row.priority)} {row.priority}
               </TableCell>
               <TableCell>
@@ -83,7 +82,7 @@ const RecentTasksTable = () => {
               <TableCell>
                 <Chip 
                   label={row.status} 
-                  color={getStatusColor(row.status)}
+                  style={{backgroundColor: getColorByStatus(row.status)}}
                   size="small"
                 />
               </TableCell>

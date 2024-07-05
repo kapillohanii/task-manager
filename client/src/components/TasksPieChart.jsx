@@ -2,17 +2,32 @@ import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Box } from '@mui/material';
+import { getColorByStatus, getHoverColorByStatus } from '../constants';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const TasksPieChart = ({ tasks }) => {
+const TasksPieChart = () => {
+  const tasks = [
+    {
+      label: 'To-Do',
+      count: 5
+    },
+    {
+      label: 'Ongoing',
+      count: 3
+    },
+    {
+      label: 'Completed',
+      count: 10
+    }
+  ]
   const data = {
-    labels: ['To-Do', 'Ongoing', 'Completed'],
+    labels: tasks.map(task => task.label),
     datasets: [
       {
-        data: [tasks.todo, tasks.ongoing, tasks.completed],
-        backgroundColor: ['#2196F3', '#FFC107', '#4CAF50'],
-        hoverBackgroundColor: ['#1976D2', '#FFA000', '#388E3C'],
+        data: tasks.map(task => task.count),
+        backgroundColor: tasks.map(task => getColorByStatus(task.label)),
+        hoverBackgroundColor: tasks.map(task => getHoverColorByStatus(task.label)),
       },
     ],
   };
@@ -43,8 +58,8 @@ const TasksPieChart = ({ tasks }) => {
 
   return (
     <Box sx={{ 
-      width: 300, 
-      height: 300, 
+      width: 500, 
+      height: 400, 
       p: 2,
     }}>
       <Pie data={data} options={options} />
