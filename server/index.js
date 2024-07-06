@@ -9,7 +9,18 @@ const app = express();
 const port = process.env.PORT || 5000;
 const uri = process.env.MONGODB_URI;
 
-app.use(cors());
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || origin === 'http://localhost:3000') {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 mongoose.connect(uri, {});
