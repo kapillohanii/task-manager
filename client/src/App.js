@@ -3,6 +3,7 @@ import { Box, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import Header from './components/Header';
 import Navigation from './components/Navigation'; 
 import Dashboard from './pages/Dashboard';
+import TaskForm from './components/TaskForm';
 
 const theme = createTheme({
   palette: {
@@ -21,6 +22,7 @@ const App = () => {
         <Navigation />
         <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 8, backgroundColor:'white'}}>
           <Dashboard />
+          <TaskForm /> 
         </Box>
       </Box>
     </ThemeProvider>

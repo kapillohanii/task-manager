@@ -28,8 +28,8 @@ router.route('/detail/:id').get((req, res) => {
 
 router.route('/create').post(async (req, res) => {
   const { 
-    title, status, priority, description, Assignee, AssignedTo, 
-    AssigneeId, AssignedToId, createdBy, updatedBy, createdById, updatedById 
+    title, status, priority, description, assignee, assignedTo, 
+    assigneeId, assignedToId, createdBy, updatedBy, createdById, updatedById 
   } = req.body;
 
   try {
@@ -38,10 +38,10 @@ router.route('/create').post(async (req, res) => {
       status,
       priority,
       description,
-      Assignee,
-      AssignedTo,
-      AssigneeId,
-      AssignedToId,
+      assignee,
+      assignedTo,
+      assigneeId,
+      assignedToId,
       createdBy,
       updatedBy,
       createdById,  

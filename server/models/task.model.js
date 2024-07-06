@@ -22,21 +22,21 @@ const taskSchema = new Schema({
   },
   description: {
     type: String,
-    required: true
+    required: false
   },
-  Assignee: {
+  assignee: {
     type: String,
     required: true
   },
-  AssignedTo: {
+  assignedTo: {
     type: String,
     required: true
   },
-  AssigneeId: {
+  assigneeId: {
     type: Schema.Types.ObjectId,
     required: true
   },
-  AssignedToId: {
+  assignedToId: {
     type: Schema.Types.ObjectId,
     required: true
   },
@@ -55,6 +55,10 @@ const taskSchema = new Schema({
   updatedById: {
     type: Schema.Types.ObjectId,
     required: true
+  },
+  deadline: {
+    type: Date,
+    required: false
   }
 }, {
   timestamps: true,

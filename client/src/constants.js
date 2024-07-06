@@ -23,3 +23,28 @@ export const getHoverColorByStatus = (status) => {
       return '#757575'; 
   }
 };
+
+
+export async function getUserDetails(userId) {
+  try {
+    const response = await fetch(`http://localhost:5000/user/profile/${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch user details');
+    }
+
+    const userDetails = await response.json();
+    return userDetails;
+
+  } catch (error) {
+    console.error('Error fetching user details:', error);
+    throw error;
+  }
+}
+
+

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useUser } from '@clerk/clerk-react';
 import { 
   TextField, 
   Select, 
@@ -9,21 +10,23 @@ import {
   Box, 
   Typography 
 } from '@mui/material';
+import { getUserDetails } from '../constants';  
 
 const TaskForm = ({ task, onSubmit }) => {
+  const { user } = useUser();
   const [formData, setFormData] = useState({
-    name: '',
+    title: '',
     description: '',
-    dueDate: '',
+    deadline: '',
     priority: '',
-    status: ''
+    status: '',
   });
 
   useEffect(() => {
     if (task) {
       setFormData({
         ...task,
-        dueDate: task.dueDate ? new Date(task.dueDate).toISOString().split('T')[0] : ''
+        deadline: task.deadline ? new Date(task.deadline).toISOString().split('T')[0] : ''
       });
     }
   }, [task]);
@@ -36,9 +39,52 @@ const TaskForm = ({ task, onSubmit }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    
+    const currentUser = await getUserDetails(user.id)
+    const taskData = {
+      ...formData,
+      assignee: currentUser.fullName,
+      assignedTo: currentUser.fullName,
+      createdBy: currentUser.fullName,
+      createdById: currentUser._id,
+      updatedBy: currentUser.fullName,  
+      updatedById: currentUser._id,
+      assigneeId: currentUser._id,
+      assignedToId: currentUser._id, 
+    };
+
+    try {
+      const response = await fetch('http://localhost:5000/task/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(taskData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create task');
+      }
+
+      const result = await response.json();
+      console.log('Task created:', result);
+          
+      // onSubmit(result);
+
+      setFormData({
+        title: '',
+        description: '',
+        deadline: '',
+        priority: '',
+        status: '',
+        assignedTo: '',
+        assignee: '',
+      });
+    } catch (error) {
+      console.error('Error creating task:', error);
+    }
   };
 
   return (
@@ -50,9 +96,9 @@ const TaskForm = ({ task, onSubmit }) => {
       <TextField
         fullWidth
         margin="normal"
-        label="Task Name"
-        name="name"
-        value={formData.name}
+        label="Task Title"
+        name="title"
+        value={formData.title}
         onChange={handleChange}
         required
       />
@@ -71,10 +117,10 @@ const TaskForm = ({ task, onSubmit }) => {
       <TextField
         fullWidth
         margin="normal"
-        label="Due Date"
-        name="dueDate"
+        label="Deadline"
+        name="deadline"
         type="date"
-        value={formData.dueDate}
+        value={formData.deadline}
         onChange={handleChange}
         InputLabelProps={{
           shrink: true,
@@ -103,8 +149,8 @@ const TaskForm = ({ task, onSubmit }) => {
           onChange={handleChange}
           label="Status"
         >
-          <MenuItem value="not started">Not Started</MenuItem>
-          <MenuItem value="in progress">In Progress</MenuItem>
+          <MenuItem value="not started">TO-DO</MenuItem>
+          <MenuItem value="in progress">On Going</MenuItem>
           <MenuItem value="completed">Completed</MenuItem>
         </Select>
       </FormControl>
