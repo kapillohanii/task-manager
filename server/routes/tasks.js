@@ -1,0 +1,100 @@
+const router = require('express').Router();
+let Task = require('../models/task.model');
+const mongoose = require('mongoose');
+
+
+router.route('/all').get(async (req, res) => {
+  try {
+    const tasks = await Task.find();
+    res.json(tasks);
+  } catch (err) {
+    res.status(400).json('Error: ' + err);
+  }
+});
+
+router.route('/detail/:id').get((req, res) => {
+  const id = req.params.id;
+  Task.findOne({ _id: id })
+    .then(task => {
+      if (task) {
+        res.json(task);
+      } else {
+        res.status(404).json({error: 'Task not found'});
+      }
+    })
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
+
+router.route('/create').post(async (req, res) => {
+  const { 
+    title, status, priority, description, Assignee, AssignedTo, 
+    AssigneeId, AssignedToId, createdBy, updatedBy, createdById, updatedById 
+  } = req.body;
+
+  try {
+    const newTask = new Task({
+      title,
+      status,
+      priority,
+      description,
+      Assignee,
+      AssignedTo,
+      AssigneeId,
+      AssignedToId,
+      createdBy,
+      updatedBy,
+      createdById,  
+      updatedById
+    });
+
+    const savedTask = await newTask.save();
+    res.json(`Task with id: ${savedTask.id} added`);
+  } catch (err) {
+    if (err instanceof mongoose.Error.ValidationError) {
+      res.status(400).json('Validation Error: ' + err.message);
+    } else if (err instanceof mongoose.Error.CastError) {
+      res.status(400).json('Invalid ID format: ' + err.message);
+    } else {
+      res.status(500).json('Error: ' + err.message);
+    }
+  }
+});
+
+module.exports = router;
+
+router.route('/update/:id').put(async (req, res) => {
+  try {
+    const task = await Task.findOne({ _id: req.params.id });
+    if (!task) {
+      return res.status(404).json('Task not found');
+    }
+
+    Object.keys(req.body).forEach(key => {
+      if (key in task) {
+        task[key] = req.body[key];
+      }
+    });
+
+    task.updatedAt = new Date();
+
+    const updatedTask = await task.save();
+    res.json(`Task with id: ${updatedTask._id} updated`);
+  } catch (err) {
+    res.status(400).json('Error: ' + err);
+  }
+});
+
+router.route('/delete/:id').delete(async (req, res) => {
+  try {
+    const result = await Task.deleteOne({ _id: req.params.id });
+    if (result.deletedCount === 0) {
+      return res.status(404).json('Task not found');
+    }
+    res.json(`Task with id: ${req.params.id} deleted`);
+  } catch (err) {
+    res.status(400).json('Error: ' + err);
+  }
+});
+
+module.exports = router;
