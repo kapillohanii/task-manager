@@ -1,16 +1,13 @@
-import React, {useState} from 'react';
+import React, { useState, useRef } from 'react';
 import { Box, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import Header from './components/Header';
 import Navigation from './components/Navigation'; 
 import Dashboard from './pages/Dashboard';
-import TaskForm from './components/TaskForm';
+import Tasks from './pages/Tasks';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import PeopleIcon from '@mui/icons-material/People';
-import TaskList from './components/TaskList';
-import TaskGrid from './components/TaskGrid';
-import AddNewTask from './components/AddNewTask';
-import Tasks from './pages/Tasks';
+import LoadingBar from 'react-top-loading-bar';
 
 const theme = createTheme({
   palette: {
@@ -26,11 +23,22 @@ const App = () => {
     { text: 'Tasks', icon: <AssignmentIcon /> },
     { text: 'Teams', icon: <PeopleIcon /> },
   ];
-  const [activeItem, setActiveItem] = useState(menuItems[0])
+  const [activeItem, setActiveItem] = useState(menuItems[0]);
+  const [loading, setLoading] = useState(false);
+  const loadingBarRef = useRef(null);
 
   const handleNavigation = (item) => {
     setActiveItem(item);
-  }
+  };
+
+  const handleLoading = (isLoading) => {
+    setLoading(isLoading);
+    if (isLoading) {
+      loadingBarRef.current.continuousStart();
+    } else {
+      loadingBarRef.current.complete();
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -38,11 +46,11 @@ const App = () => {
         <CssBaseline />
         <Header />
         <Navigation menuItems={menuItems} activeItem={activeItem} handleNavigation={handleNavigation}/>
-        <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 8, backgroundColor:'white'}}>
-          <br />
-          {activeItem?.text==='Dashboard' && <Dashboard />}
-          {activeItem?.text==='Tasks' && <Tasks />}
-          {activeItem?.text==='Teams' && <></>}
+        <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 8, backgroundColor: 'white' }}>
+          <LoadingBar color="#f11946" ref={loadingBarRef} />
+          {activeItem?.text === 'Dashboard' && <Dashboard handleLoading={handleLoading} />}
+          {activeItem?.text === 'Tasks' && <Tasks handleLoading={handleLoading} />}
+          {activeItem?.text === 'Teams' && <></>}
         </Box>
       </Box>
     </ThemeProvider>

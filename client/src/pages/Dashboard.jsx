@@ -1,17 +1,16 @@
 import TasksOverview from "../components/TasksOverview";
 import TasksPieChart from "../components/TasksPieChart";
 import RecentTasksTable from "../components/RecentTasksTable";
-import { Box, CircularProgress } from '@mui/material';
 import { useState, useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
 
-const Dashboard = () => {
+const Dashboard = ({handleLoading}) => {
     const { user } = useUser();
     const [tasks, setTasks] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     useEffect(() => {
         const checkUser = async () => {
+            handleLoading(true)
             if (user) {
                 try {
                     const response = await fetch(`http://localhost:5000/user/profile/${user.id}`);
@@ -41,6 +40,7 @@ const Dashboard = () => {
                     console.error('Error:', error);
                 }
             }
+            handleLoading(false);
         };
 
         checkUser();
@@ -49,32 +49,25 @@ const Dashboard = () => {
 
     useEffect(() => {
         const fetchTasks = async () => {
+          handleLoading(true);
           try {
-            setIsLoading(true);
             const response = await fetch('http://localhost:5000/task/all');
             if (!response.ok) {
               throw new Error('Failed to fetch tasks');
             }
             const data = await response.json();
             setTasks(data);
-            setIsLoading(false);
           } catch (error) {
             console.error('Error fetching tasks:', error);
             setError(error.message);
-            setIsLoading(false);
           }
+          handleLoading(false);
         };
     
         fetchTasks();
       }, []);
 
     return (
-        isLoading 
-        ? 
-            <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
-              <CircularProgress sx={{color:'#cfcfcf'}}/>
-            </Box>
-        :
         <div style={{ display: 'flex', flexDirection: 'column' }}>
             <TasksOverview tasks={tasks} />
             <div style={{ display: 'flex', flexDirection: 'row', marginTop: '20px' }}>
