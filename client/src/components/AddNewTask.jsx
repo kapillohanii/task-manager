@@ -17,7 +17,7 @@ const style = {
 
 };
 
-const AddNewTask = () => {
+const AddNewTask = ({onDelete, onSubmit}) => {
   const [open, setOpen] = useState(false);
   
   const handleOpen = () => setOpen(true);
@@ -46,7 +46,7 @@ const AddNewTask = () => {
               <CloseIcon />
             </IconButton>
           </Box>
-          <TaskForm />
+          <TaskForm onDelete={onDelete} onSubmit={onSubmit} />
         </Box>
       </Modal>
     </div>

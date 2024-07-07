@@ -15,7 +15,8 @@ import {
 } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
 import CloseIcon from '@mui/icons-material/Close';
-import { getUserDetails } from '../constants';  
+import { getUserDetails } from '../constants';
+import { createPortal } from 'react-dom';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -93,9 +94,9 @@ const TaskForm = ({ task, onSubmit, onDelete }) => {
       
       showSnackbar(task ? 'Task updated successfully' : 'Task created successfully', 'success');
 
-      onSubmit(result);
-      console.log(result);
-
+      if (onSubmit) {
+        onSubmit(result);
+      }
 
       if (!task) {
         setFormData({
@@ -129,7 +130,6 @@ const TaskForm = ({ task, onSubmit, onDelete }) => {
 
       if (onDelete) {
         onDelete(task._id);
-        console.log('deleted')
       }
 
     } catch (error) {
@@ -153,11 +153,10 @@ const TaskForm = ({ task, onSubmit, onDelete }) => {
       });
     }, 100);
 
-    // Automatically close the snackbar after 5 seconds
     setTimeout(() => {
       setSnackbar(prev => ({ ...prev, open: false }));
       setProgress(100);
-    }, 5000);
+    }, 2000);
   };
 
   const handleCloseSnackbar = (event, reason) => {
@@ -259,46 +258,49 @@ const TaskForm = ({ task, onSubmit, onDelete }) => {
         </Button>
       </Box>
 
-      <Snackbar 
-        open={snackbar.open} 
-        autoHideDuration={5000} 
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-        sx={{
-          position: 'fixed',
-          bottom: 16,
-          right: 16,
-        }}
-      >
-        <Alert 
-          onClose={handleCloseSnackbar} 
-          severity={snackbar.severity} 
-          sx={{ width: '100%' }}
-          action={
-            <IconButton
-              size="small"
-              aria-label="close"
-              color="inherit"
-              onClick={handleCloseSnackbar}
-            >
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          }
+      {createPortal(
+        <Snackbar 
+          open={snackbar.open} 
+          autoHideDuration={2000} 
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          sx={{
+            position: 'fixed',
+            bottom: 16,
+            right: 16,
+          }}
         >
-          {snackbar.message}
-          <LinearProgress 
-            variant="determinate" 
-            value={progress} 
-            sx={{ 
-              marginTop: 1, 
-              backgroundColor: 'rgba(255,255,255,0.3)',
-              '& .MuiLinearProgress-bar': {
-                backgroundColor: 'rgba(255,255,255,0.7)'
-              }
-            }} 
-          />
-        </Alert>
-      </Snackbar>
+          <Alert 
+            onClose={handleCloseSnackbar} 
+            severity={snackbar.severity} 
+            sx={{ width: '100%' }}
+            action={
+              <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleCloseSnackbar}
+              >
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            }
+          >
+            {snackbar.message}
+            <LinearProgress 
+              variant="determinate" 
+              value={progress} 
+              sx={{ 
+                marginTop: 1, 
+                backgroundColor: 'rgba(255,255,255,0.3)',
+                '& .MuiLinearProgress-bar': {
+                  backgroundColor: 'rgba(255,255,255,0.7)'
+                }
+              }} 
+            />
+          </Alert>
+        </Snackbar>,
+        document.body
+      )}
     </Box>
   );
 };

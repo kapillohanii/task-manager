@@ -31,7 +31,7 @@ const TaskCard = ({ task, onDelete, onSubmit }) => {
   const { title, createdBy, assignedTo, deadline, status } = task;
   const [open, setOpen] = useState(false);
 
-  const handleOpen = () => {console.log("open"); setOpen(true);};
+  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (

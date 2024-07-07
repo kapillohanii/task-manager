@@ -11,6 +11,21 @@ const Tasks = () => {
   const [deleted, setDeleted] = useState(null);
   const [submited, setSubmited] = useState(null);
 
+
+  const handleDeleted = (taskId) => {
+    setTimeout(() => {
+      setDeleted(taskId)
+    }, 2000);
+  };
+
+
+  const handleSubmited = (task) => {
+    setTimeout(() => {
+      setSubmited(task)
+    }, 2000);
+  };
+
+
   useEffect(() => {
     const fetchTasks = async () => {
       try {
@@ -37,7 +52,7 @@ const Tasks = () => {
   return (
     <Container>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', my: 2 }}>
-        <AddNewTask />
+        <AddNewTask onSubmit={handleSubmited} onDelete={handleDeleted} />
       </Box>
       {isLoading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
@@ -48,8 +63,8 @@ const Tasks = () => {
       ) : (
         <TaskGrid 
           tasks={tasks} 
-          onDelete={setDeleted}
-          onSubmit={setSubmited}
+          onDelete={handleDeleted}
+          onSubmit={handleSubmited}
         />
       )}
     </Container>

@@ -50,7 +50,7 @@ router.route('/create').post(async (req, res) => {
     });
 
     const savedTask = await newTask.save();
-    res.json(`Task with id: ${savedTask.id} added`);
+    res.json(`Task with id: ${savedTask._id} added`);
   } catch (err) {
     if (err instanceof mongoose.Error.ValidationError) {
       res.status(400).json('Validation Error: ' + err.message);
@@ -62,7 +62,6 @@ router.route('/create').post(async (req, res) => {
   }
 });
 
-module.exports = router;
 
 router.route('/update/:id').put(async (req, res) => {
   try {
