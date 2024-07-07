@@ -1,3 +1,7 @@
+import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
+import KeyboardDoubleArrowUpSharpIcon from '@mui/icons-material/KeyboardDoubleArrowUpSharp';
+import KeyboardArrowUpSharpIcon from '@mui/icons-material/KeyboardArrowUpSharp';
+
 export const getColorByStatus = (status) => {
     switch (status.toLowerCase()) {
       case 'to-do':
@@ -24,6 +28,18 @@ export const getHoverColorByStatus = (status) => {
   }
 };
 
+export const getPriorityIcon = (priority) => {
+  switch(priority.toLowerCase()) {
+    case 'high':
+      return <PriorityHighIcon color="error" />;
+    case 'medium':
+      return <KeyboardDoubleArrowUpSharpIcon color="warning" />;
+    case 'low':
+      return <KeyboardArrowUpSharpIcon color="warning" />;
+    default:
+      return null;
+  }
+};
 
 export async function getUserDetails(userId) {
   try {

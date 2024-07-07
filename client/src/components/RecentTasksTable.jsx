@@ -11,23 +11,8 @@ import {
   Avatar,
   Typography
 } from '@mui/material';
-import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
-import KeyboardDoubleArrowUpSharpIcon from '@mui/icons-material/KeyboardDoubleArrowUpSharp';
-import KeyboardArrowUpSharpIcon from '@mui/icons-material/KeyboardArrowUpSharp';
-import { getColorByStatus } from '../constants';
+import { getColorByStatus, getPriorityIcon } from '../constants';
 
-const getPriorityIcon = (priority) => {
-  switch(priority.toLowerCase()) {
-    case 'high':
-      return <PriorityHighIcon color="error" />;
-    case 'medium':
-      return <KeyboardDoubleArrowUpSharpIcon color="warning" />;
-    case 'low':
-      return <KeyboardArrowUpSharpIcon color="warning" />;
-    default:
-      return null;
-  }
-};
 
 
 const RecentTasksTable = ({tasks}) => {

@@ -10,7 +10,7 @@ import {
   Modal,
   IconButton 
 } from '@mui/material';
-import { getColorByStatus } from '../constants';
+import { getColorByStatus, getPriorityIcon } from '../constants';
 import { Close as CloseIcon } from '@mui/icons-material';
 import TaskForm from './TaskForm';
 
@@ -28,7 +28,7 @@ const modalStyle = {
 };
 
 const TaskCard = ({ task, onDelete, onSubmit }) => {
-  const { title, createdBy, assignedTo, deadline, status } = task;
+  const { title, createdBy, assignedTo, deadline, status, priority } = task;
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -50,34 +50,53 @@ const TaskCard = ({ task, onDelete, onSubmit }) => {
         }}
       >
         <CardContent>
+          <div style={{display:'flex', justifyContent: 'space-between'}}>
           <Typography variant="h6" component="div" gutterBottom>
             {title}
           </Typography>
+          <Typography variant="h6" component="div" gutterBottom>
+            {getPriorityIcon(priority)}
+          </Typography>
+          </div>
+
           
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-            <Typography variant="body2" color="text.secondary">
-              Created by: {createdBy}
-            </Typography>
-            <Chip
-              avatar={<Avatar>{assignedTo.charAt(0)}</Avatar>}
-              label={`Assigned to: ${assignedTo}`}
-              variant="outlined"
-              size="small"
-            />
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                Created by:
+              </Typography>
+              <Chip
+                avatar={<Avatar>{createdBy.charAt(0)}</Avatar>}
+                label={`${createdBy}`}
+                variant="outlined"
+                size="small"
+              />
+            </Box>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                Assigned to:
+              </Typography>
+              <Chip
+                avatar={<Avatar>{assignedTo.charAt(0)}</Avatar>}
+                label={`${assignedTo}`}
+                variant="outlined"
+                size="small"
+              />
+            </Box>
           </Box>
 
           <Divider sx={{ my: 1 }} />
 
           <Typography variant="body2" color="text.secondary" gutterBottom>
-            Due Date: {new Date(deadline).toLocaleDateString()}
+            Deadline: {new Date(deadline).toLocaleDateString()}
           </Typography>
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Box 
               sx={{
                 display: 'inline-block',
-                width: 1.25,
-                height: 1.25,
+                width: 15,
+                height: 15,
                 borderRadius: '50%',
                 backgroundColor: getColorByStatus(status),
                 marginRight: 1,
