@@ -5,7 +5,7 @@ import TaskCard from './TaskCard';
 
 
 
-const TaskGrid = ({ tasks, onDelete, onSubmit }) => {
+const TaskGrid = ({ tasks }) => {
   const statuses = ['to-do', 'ongoing','completed'];
 
   return (
@@ -29,7 +29,7 @@ const TaskGrid = ({ tasks, onDelete, onSubmit }) => {
           {tasks
             .filter((task) => task.status.toLowerCase() === status)
             .map((task) => (
-              <TaskCard key={task.id} task={task} onDelete={onDelete} onSubmit={onSubmit} />
+              <TaskCard key={task.id} task={task} />
             ))}
         </Grid>
       ))}

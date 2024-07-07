@@ -81,6 +81,7 @@ router.route('/update/:id').put(async (req, res) => {
     task.updatedAt = new Date();
 
     const updatedTask = await task.save();
+    socket.getIO().emit('taskUpdated', updatedTask);
     res.json(`Task with id: ${updatedTask._id} updated`);
   } catch (err) {
     res.status(400).json('Error: ' + err);
@@ -93,6 +94,7 @@ router.route('/delete/:id').delete(async (req, res) => {
     if (result.deletedCount === 0) {
       return res.status(404).json('Task not found');
     }
+    socket.getIO().emit('taskDeleted', result);
     res.json(`Task with id: ${req.params.id} deleted`);
   } catch (err) {
     res.status(400).json('Error: ' + err);

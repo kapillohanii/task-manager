@@ -22,7 +22,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const TaskForm = ({ task, onSubmit, onDelete }) => {
+const TaskForm = ({ task }) => {
   const { user } = useUser();
   const [formData, setFormData] = useState({
     title: '',
@@ -94,10 +94,6 @@ const TaskForm = ({ task, onSubmit, onDelete }) => {
       
       showSnackbar(task ? 'Task updated successfully' : 'Task created successfully', 'success');
 
-      if (onSubmit) {
-        onSubmit(result);
-      }
-
       if (!task) {
         setFormData({
           title: '',
@@ -127,10 +123,6 @@ const TaskForm = ({ task, onSubmit, onDelete }) => {
 
       console.log('Task deleted:', task._id);
       showSnackbar('Task deleted successfully', 'success');
-
-      if (onDelete) {
-        onDelete(task._id);
-      }
 
     } catch (error) {
       console.error('Error deleting task:', error);

@@ -63,4 +63,21 @@ export async function getUserDetails(userId) {
   }
 }
 
+export const fetchTasks = async (handleLoading) => {
+  handleLoading(true)
+  try {
+    const response = await fetch('http://localhost:5000/task/all');
+    if (!response.ok) {
+      throw new Error('Failed to fetch tasks');
+    }
+    const data = await response.json();
+    handleLoading(false)
+    return data;
+  } catch (error) {
+    console.error('Error fetching tasks:', error);
+    handleLoading(false)
+    throw new Error(error.message);
+  }
+};
+
 

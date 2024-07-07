@@ -4,10 +4,8 @@ import RecentTasksTable from "../components/RecentTasksTable";
 import { useState, useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
 
-const Dashboard = ({handleLoading}) => {
+const Dashboard = ({tasks, handleLoading}) => {
     const { user } = useUser();
-    const [tasks, setTasks] = useState([]);
-    const [error, setError] = useState(null);
     useEffect(() => {
         const checkUser = async () => {
             handleLoading(true)
@@ -47,25 +45,6 @@ const Dashboard = ({handleLoading}) => {
     }, [user]);
 
 
-    useEffect(() => {
-        const fetchTasks = async () => {
-          handleLoading(true);
-          try {
-            const response = await fetch('http://localhost:5000/task/all');
-            if (!response.ok) {
-              throw new Error('Failed to fetch tasks');
-            }
-            const data = await response.json();
-            setTasks(data);
-          } catch (error) {
-            console.error('Error fetching tasks:', error);
-            setError(error.message);
-          }
-          handleLoading(false);
-        };
-    
-        fetchTasks();
-      }, []);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column' }}>

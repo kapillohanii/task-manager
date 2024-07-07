@@ -9,6 +9,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import PeopleIcon from '@mui/icons-material/People';
 import LoadingBar from 'react-top-loading-bar';
 import io from 'socket.io-client';
+import { fetchTasks } from './constants';
 
 const socket = io('http://localhost:5000');
 
@@ -21,18 +22,7 @@ const theme = createTheme({
 });
 
 const App = () => {
-  useEffect(() => {
-    socket.on('taskCreated', (newTask) => {
-      console.log("XXXXXXXX", newTask)
-    });
-  
-  
-    return () => {
-      socket.off('taskCreated');
-      socket.off('taskUpdated');
-      socket.off('taskDeleted');
-    };
-  }, []);
+  const [tasks, setTasks] = useState([])
   
   const menuItems = [
     { text: 'Dashboard', icon: <DashboardIcon /> },
@@ -40,7 +30,6 @@ const App = () => {
     { text: 'Teams', icon: <PeopleIcon /> },
   ];
   const [activeItem, setActiveItem] = useState(menuItems[0]);
-  const [loading, setLoading] = useState(false);
   const loadingBarRef = useRef(null);
 
   const handleNavigation = (item) => {
@@ -48,13 +37,45 @@ const App = () => {
   };
 
   const handleLoading = (isLoading) => {
-    setLoading(isLoading);
     if (isLoading) {
       loadingBarRef.current.continuousStart();
     } else {
       loadingBarRef.current.complete();
     }
   };
+
+  async function refreshTasks(){
+    try{
+      const fetchedTasks = await fetchTasks(handleLoading);
+      setTasks(fetchedTasks);
+    }
+    catch(error){
+      throw new Error(error.message);
+    } 
+  }
+
+  useEffect(()=> {
+    refreshTasks()
+  },[])
+
+  useEffect(() => {
+    socket.on('taskCreated', (task) => {
+      refreshTasks();
+    });
+    socket.on('taskUpdated', (task) => {
+      console.log('updated')
+      refreshTasks();
+    });
+    socket.on('taskDeleted', (task) => {
+      console.log("dlelete")
+      refreshTasks();
+    });
+    return () => {
+      socket.off('taskCreated');
+      socket.off('taskUpdated');
+      socket.off('taskDeleted');
+    };
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -64,8 +85,8 @@ const App = () => {
         <Navigation menuItems={menuItems} activeItem={activeItem} handleNavigation={handleNavigation}/>
         <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 8, backgroundColor: 'white' }}>
           <LoadingBar color="#f11946" ref={loadingBarRef} />
-          {activeItem?.text === 'Dashboard' && <Dashboard handleLoading={handleLoading} />}
-          {activeItem?.text === 'Tasks' && <Tasks handleLoading={handleLoading} />}
+          {activeItem?.text === 'Dashboard' && <Dashboard tasks={tasks} handleLoading={handleLoading}/>}
+          {activeItem?.text === 'Tasks' && <Tasks tasks={tasks} />}
           {activeItem?.text === 'Teams' && <></>}
         </Box>
       </Box>

@@ -27,7 +27,7 @@ const modalStyle = {
   p: 4,
 };
 
-const TaskCard = ({ task, onDelete, onSubmit }) => {
+const TaskCard = ({ task }) => {
   const { title, createdBy, assignedTo, deadline, status, priority } = task;
   const [open, setOpen] = useState(false);
 
@@ -121,7 +121,7 @@ const TaskCard = ({ task, onDelete, onSubmit }) => {
               <CloseIcon />
             </IconButton>
           </Box>
-          <TaskForm task={task} onSubmit={onSubmit} onDelete={onDelete}/>
+          <TaskForm task={task} />
         </Box>
       </Modal>
     </>
