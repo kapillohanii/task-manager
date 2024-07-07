@@ -30,15 +30,7 @@ const getPriorityIcon = (priority) => {
 };
 
 
-const mockData = [
-  { id: 1, title: 'Implement login functionality', createdBy: 'John Doe', priority: 'High', assignedTo: 'Alice Smith', status: 'Ongoing' },
-  { id: 2, title: 'Design new landing page', createdBy: 'Jane Smith', priority: 'Medium', assignedTo: 'Bob Johnson', status: 'To-Do' },
-  { id: 3, title: 'Fix navigation bug', createdBy: 'Alice Smith', priority: 'Low', assignedTo: 'Charlie Brown', status: 'Completed' },
-  { id: 4, title: 'Update user documentation', createdBy: 'Bob Johnson', priority: 'Medium', assignedTo: 'David Wilson', status: 'Ongoing' },
-  { id: 5, title: 'Optimize database queries', createdBy: 'Charlie Brown', priority: 'High', assignedTo: 'Eve Taylor', status: 'To-Do' },
-];
-
-const RecentTasksTable = () => {
+const RecentTasksTable = ({tasks}) => {
   return (
     <TableContainer component={Paper} style={{marginLeft: '20px'}}>
         <Typography variant="h6" component="div" margin={1}>
@@ -56,7 +48,7 @@ const RecentTasksTable = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {mockData.map((row, index) => (
+          {tasks.map((row, index) => (
             <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
               <TableCell component="th" scope="row">
                 {index + 1}

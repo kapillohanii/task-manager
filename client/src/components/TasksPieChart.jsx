@@ -6,28 +6,31 @@ import { getColorByStatus, getHoverColorByStatus } from '../constants';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const TasksPieChart = () => {
-  const tasks = [
+const TasksPieChart = ({tasks}) => {
+  const todoCount = tasks.filter(task => task.status==='to-do').length;
+  const ongoingCount = tasks.filter(task => task.status==='ongoing').length;
+  const completedCount = tasks.filter(task => task.status==='completed').length;
+  const taskTypes = [
     {
       label: 'To-Do',
-      count: 5
+      count: todoCount
     },
     {
       label: 'Ongoing',
-      count: 3
+      count: ongoingCount
     },
     {
       label: 'Completed',
-      count: 10
+      count: completedCount
     }
   ]
   const data = {
-    labels: tasks.map(task => task.label),
+    labels: taskTypes.map(type => type.label),
     datasets: [
       {
-        data: tasks.map(task => task.count),
-        backgroundColor: tasks.map(task => getColorByStatus(task.label)),
-        hoverBackgroundColor: tasks.map(task => getHoverColorByStatus(task.label)),
+        data: taskTypes.map(type => type.count),
+        backgroundColor: taskTypes.map(type => getColorByStatus(type.label)),
+        hoverBackgroundColor: taskTypes.map(type => getHoverColorByStatus(type.label)),
       },
     ],
   };
