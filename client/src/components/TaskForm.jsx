@@ -24,6 +24,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const TaskForm = ({ task }) => {
   const { user } = useUser();
+  const [isChanged, setIsChanged] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -49,6 +50,7 @@ const TaskForm = ({ task }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setIsChanged(true)
     setFormData(prevData => ({
       ...prevData,
       [name]: value
@@ -166,7 +168,6 @@ const TaskForm = ({ task }) => {
       sx={{ 
         maxHeight: '70vh', 
         overflowY: 'auto', 
-        scrollbarWidth: 'thin', 
         p: 2,
         borderRadius: 1,
         bgcolor: 'background.paper',
@@ -245,7 +246,7 @@ const TaskForm = ({ task }) => {
           Delete Task
         </Button>
         )}
-        <Button type="submit" variant="contained" color="primary">
+        <Button type="submit" variant="contained" color="primary" disabled={!isChanged}>
           {task ? 'Update Task' : 'Create Task'}
         </Button>
       </Box>

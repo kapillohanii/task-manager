@@ -34,6 +34,8 @@ const TaskCard = ({ task }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const isOverdue = new Date(deadline) < new Date();
+
   return (
     <>
       <Card 
@@ -42,6 +44,7 @@ const TaskCard = ({ task }) => {
           marginBottom: 2,
           borderRadius: 2,
           transition: 'transform 0.3s, box-shadow 0.3s',
+          position: 'relative',
           '&:hover': {
             boxShadow: 6,
             transform: 'scale(1.02)',
@@ -107,6 +110,18 @@ const TaskCard = ({ task }) => {
             </Typography>
           </Box>
         </CardContent>
+        {isOverdue && (
+          <Chip 
+            label="Overdue" 
+            color="error" 
+            size="small"
+            sx={{ 
+              position: 'absolute', 
+              bottom: 16, 
+              right: 16 
+            }} 
+          />
+        )}
       </Card>
 
       <Modal

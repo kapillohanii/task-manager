@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Box, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
+import { Box, CssBaseline, ThemeProvider, createTheme, GlobalStyles } from '@mui/material';
 import Header from './components/Header';
 import Navigation from './components/Navigation'; 
 import Dashboard from './pages/Dashboard';
@@ -12,6 +12,22 @@ import io from 'socket.io-client';
 import { fetchTasks } from './constants';
 
 const socket = io('http://localhost:5000');
+
+const scrollbarStyles = {
+  '*::-webkit-scrollbar': {
+    width: '8px',
+  },
+  '*::-webkit-scrollbar-track': {
+    background: 'transparent',
+  },
+  '*::-webkit-scrollbar-thumb': {
+    backgroundColor: '#a0a0a0',
+    borderRadius: '3px'
+  },
+  '*::-webkit-scrollbar-thumb:hover': {
+    background: '#555',
+  },
+};
 
 const theme = createTheme({
   palette: {
@@ -79,6 +95,7 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <GlobalStyles styles={scrollbarStyles} />
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <Header />

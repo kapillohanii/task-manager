@@ -1,7 +1,7 @@
 import TasksOverview from "../components/TasksOverview";
 import TasksPieChart from "../components/TasksPieChart";
 import RecentTasksTable from "../components/RecentTasksTable";
-import { useState, useEffect } from "react";
+import {useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
 
 const Dashboard = ({tasks, handleLoading}) => {
