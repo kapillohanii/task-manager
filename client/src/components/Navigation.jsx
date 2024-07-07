@@ -9,18 +9,10 @@ import {
   Box,
   useTheme,
 } from '@mui/material';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import PeopleIcon from '@mui/icons-material/People';
 
-const Navigation = () => {
+
+const Navigation = ({menuItems, activeItem, handleNavigation}) => {
   const theme = useTheme();
-
-  const menuItems = [
-    { text: 'Dashboard', icon: <DashboardIcon /> },
-    { text: 'Tasks', icon: <AssignmentIcon /> },
-    { text: 'Teams', icon: <PeopleIcon /> },
-  ];
 
   return (
     <Drawer
@@ -41,7 +33,7 @@ const Navigation = () => {
       <Box sx={{ overflow: 'auto' }}>
         <List>
           {menuItems.map((item) => (
-            <ListItem button key={item.text}>
+            <ListItem button key={item.text} sx={{backgroundColor: activeItem?.text===item?.text ? '#cfcfcf': 'none'}} onClick={() => handleNavigation(item)}>
               <ListItemIcon sx={{ color: theme.palette.primary.contrastText }}>
                 {item.icon}
               </ListItemIcon>

@@ -29,7 +29,7 @@ router.route('/detail/:id').get((req, res) => {
 router.route('/create').post(async (req, res) => {
   const { 
     title, status, priority, description, assignee, assignedTo, 
-    assigneeId, assignedToId, createdBy, updatedBy, createdById, updatedById 
+    assigneeId, assignedToId, createdBy, updatedBy, createdById, updatedById, deadline
   } = req.body;
 
   try {
@@ -45,7 +45,8 @@ router.route('/create').post(async (req, res) => {
       createdBy,
       updatedBy,
       createdById,  
-      updatedById
+      updatedById,
+      deadline,
     });
 
     const savedTask = await newTask.save();

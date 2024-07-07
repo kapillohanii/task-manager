@@ -20,7 +20,7 @@ const Dashboard = () => {
                                 'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
-                                id: user.id,
+                                clerkId: user.id,
                                 email: user.primaryEmailAddress.emailAddress,
                                 fullName: `${user.firstName} ${user.lastName}`
                             }),

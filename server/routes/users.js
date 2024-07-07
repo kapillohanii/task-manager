@@ -25,11 +25,11 @@ router.route('/profile/:id').get((req, res) => {
 });
 
 router.route('/create').post(async (req, res) => {
-  const { id, email, fullName } = req.body;
+  const { clerkId, email, fullName } = req.body;
 
   try {
     const newUser = new User({
-      clerkId: id,
+      clerkId,
       email,
       fullName,
     });
