@@ -91,10 +91,11 @@ router.route('/update/:id').put(async (req, res) => {
 router.route('/delete/:id').delete(async (req, res) => {
   try {
     const result = await Task.deleteOne({ _id: req.params.id });
+    const taskData = req.body
     if (result.deletedCount === 0) {
       return res.status(404).json('Task not found');
     }
-    socket.getIO().emit('taskDeleted', result);
+    socket.getIO().emit('taskDeleted', taskData);
     res.json(`Task with id: ${req.params.id} deleted`);
   } catch (err) {
     res.status(400).json('Error: ' + err);

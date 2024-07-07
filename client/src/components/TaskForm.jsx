@@ -115,8 +115,18 @@ const TaskForm = ({ task }) => {
     if (!task || !task._id) return;
 
     try {
+      const currentUser = await getUserDetails(user.id);
+      const taskData = {
+        ...task,
+        updatedBy: currentUser.fullName,
+        updatedById: currentUser._id
+      };
       const response = await fetch(`http://localhost:5000/task/delete/${task._id}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(taskData),
       });
 
       if (!response.ok) {

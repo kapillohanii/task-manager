@@ -10,6 +10,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import LoadingBar from 'react-top-loading-bar';
 import io from 'socket.io-client';
 import { fetchTasks } from './constants';
+import NotificationStack from './components/NotificationStack';
 
 const socket = io('http://localhost:5000');
 
@@ -22,7 +23,7 @@ const scrollbarStyles = {
   },
   '*::-webkit-scrollbar-thumb': {
     backgroundColor: '#a0a0a0',
-    borderRadius: '3px'
+    borderRadius: '3px',
   },
   '*::-webkit-scrollbar-thumb:hover': {
     background: '#555',
@@ -38,8 +39,12 @@ const theme = createTheme({
 });
 
 const App = () => {
-  const [tasks, setTasks] = useState([])
-  
+  const [tasks, setTasks] = useState([]);
+  const [messages, setMessages] = useState([]);
+
+  const addNotification = (message) => {
+    setMessages(prev => [...prev, message]);
+  };
   const menuItems = [
     { text: 'Dashboard', icon: <DashboardIcon /> },
     { text: 'Tasks', icon: <AssignmentIcon /> },
@@ -60,30 +65,39 @@ const App = () => {
     }
   };
 
-  async function refreshTasks(){
-    try{
+  async function refreshTasks() {
+    try {
       const fetchedTasks = await fetchTasks(handleLoading);
       setTasks(fetchedTasks);
-    }
-    catch(error){
+    } catch (error) {
       throw new Error(error.message);
-    } 
+    }
   }
 
-  useEffect(()=> {
-    refreshTasks()
-  },[])
+  useEffect(() => {
+    refreshTasks();
+  }, []);
 
   useEffect(() => {
     socket.on('taskCreated', (task) => {
+      const truncatedTitle = task.title.length > 10 
+      ? task.title.substr(0, 10) + '...' 
+      : task.title;
+      addNotification(`${task.createdBy} created task [${truncatedTitle}]`);
       refreshTasks();
     });
     socket.on('taskUpdated', (task) => {
-      console.log('updated')
+      const truncatedTitle = task.title.length > 10 
+      ? task.title.substr(0, 10) + '...' 
+      : task.title;
+      addNotification(`${task.updatedBy} updated task [${truncatedTitle}]`);
       refreshTasks();
     });
     socket.on('taskDeleted', (task) => {
-      console.log("dlelete")
+      const truncatedTitle = task.title.length > 10 
+      ? task.title.substr(0, 10) + '...' 
+      : task.title;
+      addNotification(`${task.updatedBy} deleted task [${truncatedTitle}]`);
       refreshTasks();
     });
     return () => {
@@ -99,13 +113,14 @@ const App = () => {
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <Header />
-        <Navigation menuItems={menuItems} activeItem={activeItem} handleNavigation={handleNavigation}/>
+        <Navigation menuItems={menuItems} activeItem={activeItem} handleNavigation={handleNavigation} />
         <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 8, backgroundColor: 'white' }}>
           <LoadingBar color="#f11946" ref={loadingBarRef} />
-          {activeItem?.text === 'Dashboard' && <Dashboard tasks={tasks} handleLoading={handleLoading}/>}
+          {activeItem?.text === 'Dashboard' && <Dashboard tasks={tasks} handleLoading={handleLoading} />}
           {activeItem?.text === 'Tasks' && <Tasks tasks={tasks} />}
           {activeItem?.text === 'Teams' && <></>}
         </Box>
+        <NotificationStack messages={messages} />
       </Box>
     </ThemeProvider>
   );
