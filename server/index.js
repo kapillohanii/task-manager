@@ -2,9 +2,15 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
-require('dotenv').config();
+const http = require('http');
+const socket = require('./socket');
 
 const app = express();
+const server = http.createServer(app);
+
+const io = socket.init(server);
+
+require('dotenv').config();
 
 const port = process.env.PORT || 5000;
 const uri = process.env.MONGODB_URI;
@@ -35,6 +41,6 @@ const usersRouter = require('./routes/users');
 app.use('/task', tasksRouter);
 app.use('/user',usersRouter);
 
-app.listen(port, () => {
-    console.log(`Server is running on port: ${port}`);
+server.listen(port, () => {
+  console.log(`Server is running on port: ${port}`);
 });

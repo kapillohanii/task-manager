@@ -1,6 +1,7 @@
 const router = require('express').Router();
 let Task = require('../models/task.model');
 const mongoose = require('mongoose');
+const socket = require('../socket');
 
 
 router.route('/all').get(async (req, res) => {
@@ -49,6 +50,7 @@ router.route('/create').post(async (req, res) => {
       deadline,
     });
 
+    socket.getIO().emit('taskCreated', newTask);
     const savedTask = await newTask.save();
     res.json(`Task with id: ${savedTask._id} added`);
   } catch (err) {

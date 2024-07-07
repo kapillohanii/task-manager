@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Box, CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import Header from './components/Header';
 import Navigation from './components/Navigation'; 
@@ -8,6 +8,9 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import PeopleIcon from '@mui/icons-material/People';
 import LoadingBar from 'react-top-loading-bar';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:5000');
 
 const theme = createTheme({
   palette: {
@@ -18,6 +21,19 @@ const theme = createTheme({
 });
 
 const App = () => {
+  useEffect(() => {
+    socket.on('taskCreated', (newTask) => {
+      console.log("XXXXXXXX", newTask)
+    });
+  
+  
+    return () => {
+      socket.off('taskCreated');
+      socket.off('taskUpdated');
+      socket.off('taskDeleted');
+    };
+  }, []);
+  
   const menuItems = [
     { text: 'Dashboard', icon: <DashboardIcon /> },
     { text: 'Tasks', icon: <AssignmentIcon /> },
