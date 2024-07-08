@@ -3,6 +3,7 @@ import TasksPieChart from "../components/TasksPieChart";
 import RecentTasksTable from "../components/RecentTasksTable";
 import {useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
+import { serverEndpoint } from '../constants';
 
 const Dashboard = ({tasks, handleLoading}) => {
     const { user } = useUser();
@@ -11,10 +12,10 @@ const Dashboard = ({tasks, handleLoading}) => {
             handleLoading(true)
             if (user) {
                 try {
-                    const response = await fetch(`http://localhost:5000/user/profile/${user.id}`);
+                    const response = await fetch(`${serverEndpoint}/user/profile/${user.id}`);
                     if (response.ok) {
                     } else if (response.status === 404) {
-                        const createResponse = await fetch('http://localhost:5000/user/create', {
+                        const createResponse = await fetch(`${serverEndpoint}/user/create`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',

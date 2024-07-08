@@ -9,11 +9,12 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import PeopleIcon from '@mui/icons-material/People';
 import LoadingBar from 'react-top-loading-bar';
 import io from 'socket.io-client';
-import { fetchTasks, fetchUsers } from './constants';
+import { fetchTasks, fetchUsers, serverEndpoint } from './constants';
 import NotificationStack from './components/NotificationStack';
 import Team from './pages/Team';
 
-const socket = io('http://localhost:5000');
+
+const socket = io(`${serverEndpoint}`);
 
 const scrollbarStyles = {
   '*::-webkit-scrollbar': {

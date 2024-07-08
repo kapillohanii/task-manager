@@ -20,6 +20,7 @@ import MuiAlert from '@mui/material/Alert';
 import CloseIcon from '@mui/icons-material/Close';
 import { getUserDetails } from '../constants';
 import { createPortal } from 'react-dom';
+import { serverEndpoint } from '../constants';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -91,8 +92,8 @@ const TaskForm = ({ task, users }) => {
       };
 
       const url = task 
-        ? `http://localhost:5000/task/update/${task._id}` 
-        : 'http://localhost:5000/task/create';
+        ? `${serverEndpoint}/task/update/${task._id}` 
+        : `${serverEndpoint}/task/create`;
       const method = task ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
@@ -139,7 +140,7 @@ const TaskForm = ({ task, users }) => {
         updatedBy: currentUser.fullName,
         updatedById: currentUser._id
       };
-      const response = await fetch(`http://localhost:5000/task/delete/${task._id}`, {
+      const response = await fetch(`${serverEndpoint}/task/delete/${task._id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

@@ -2,6 +2,11 @@ import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 import KeyboardDoubleArrowUpSharpIcon from '@mui/icons-material/KeyboardDoubleArrowUpSharp';
 import KeyboardArrowUpSharpIcon from '@mui/icons-material/KeyboardArrowUpSharp';
 
+if (!process.env.REACT_APP_SERVER_ENDPOINT) {
+  throw new Error("Missing Server Endpoint");
+}
+export const serverEndpoint = process.env.REACT_APP_SERVER_ENDPOINT;
+
 export const getColorByStatus = (status) => {
     switch (status.toLowerCase()) {
       case 'to-do':
@@ -43,7 +48,7 @@ export const getPriorityIcon = (priority) => {
 
 export async function getUserDetails(userId) {
   try {
-    const response = await fetch(`http://localhost:5000/user/profile/${userId}`, {
+    const response = await fetch(`${serverEndpoint}/user/profile/${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -66,7 +71,7 @@ export async function getUserDetails(userId) {
 export const fetchTasks = async (handleLoading) => {
   handleLoading(true)
   try {
-    const response = await fetch('http://localhost:5000/task/all');
+    const response = await fetch(`${serverEndpoint}/task/all`);
     if (!response.ok) {
       throw new Error('Failed to fetch tasks');
     }
@@ -83,7 +88,7 @@ export const fetchTasks = async (handleLoading) => {
 export const fetchUsers = async (handleLoading) => {
   handleLoading(true)
   try {
-    const response = await fetch('http://localhost:5000/user/all');
+    const response = await fetch(`${serverEndpoint}/user/all`);
     if (!response.ok) {
       throw new Error('Failed to fetch users');
     }
