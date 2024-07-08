@@ -2,6 +2,7 @@ const router = require('express').Router();
 let Task = require('../models/task.model');
 const mongoose = require('mongoose');
 const socket = require('../socket');
+const indexDataToAlgolia = require('../algolia');
 
 
 router.route('/all').get(async (req, res) => {
@@ -52,6 +53,7 @@ router.route('/create').post(async (req, res) => {
 
     socket.getIO().emit('taskCreated', newTask);
     const savedTask = await newTask.save();
+    await indexDataToAlgolia(); // Index after creating a task
     res.json(`Task with id: ${savedTask._id} added`);
   } catch (err) {
     if (err instanceof mongoose.Error.ValidationError) {
@@ -63,7 +65,6 @@ router.route('/create').post(async (req, res) => {
     }
   }
 });
-
 
 router.route('/update/:id').put(async (req, res) => {
   try {
@@ -82,6 +83,7 @@ router.route('/update/:id').put(async (req, res) => {
 
     const updatedTask = await task.save();
     socket.getIO().emit('taskUpdated', updatedTask);
+    await indexDataToAlgolia(); // Index after updating a task
     res.json(`Task with id: ${updatedTask._id} updated`);
   } catch (err) {
     res.status(400).json('Error: ' + err);
@@ -96,6 +98,7 @@ router.route('/delete/:id').delete(async (req, res) => {
       return res.status(404).json('Task not found');
     }
     socket.getIO().emit('taskDeleted', taskData);
+    await indexDataToAlgolia(); // Index after deleting a task
     res.json(`Task with id: ${req.params.id} deleted`);
   } catch (err) {
     res.status(400).json('Error: ' + err);

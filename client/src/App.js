@@ -11,6 +11,7 @@ import LoadingBar from 'react-top-loading-bar';
 import io from 'socket.io-client';
 import { fetchTasks } from './constants';
 import NotificationStack from './components/NotificationStack';
+import AlgoliaSearch from './components/AlgoliaSearch';
 
 const socket = io('http://localhost:5000');
 
