@@ -17,7 +17,7 @@ const uri = process.env.MONGODB_URI;
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || origin === 'http://localhost:3000') {
+    if (!origin || origin === process.env.CLIENT_ORIGIN_ENDPOINT) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));

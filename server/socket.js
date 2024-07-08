@@ -1,4 +1,5 @@
 const socketIo = require('socket.io');
+require('dotenv').config();
 
 let io;
 
@@ -6,7 +7,7 @@ module.exports = {
   init: (server) => {
     io = socketIo(server, {
       cors: {
-        origin: "http://localhost:3000",
+        origin: process.env.CLIENT_ORIGIN_ENDPOINT,
         methods: ["GET", "POST"]
       }
     });
