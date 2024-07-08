@@ -11,7 +11,10 @@ import {
   Typography,
   Snackbar,
   IconButton,
-  LinearProgress
+  LinearProgress,
+  Avatar,
+  ListItemAvatar,
+  ListItemText
 } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
 import CloseIcon from '@mui/icons-material/Close';
@@ -22,7 +25,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const TaskForm = ({ task }) => {
+const TaskForm = ({ task, users }) => {
   const { user } = useUser();
   const [isChanged, setIsChanged] = useState(false);
   const [formData, setFormData] = useState({
@@ -31,6 +34,8 @@ const TaskForm = ({ task }) => {
     deadline: '',
     priority: '',
     status: '',
+    assignedTo: '',
+    assignedToId: '',
   });
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -43,18 +48,28 @@ const TaskForm = ({ task }) => {
     if (task) {
       setFormData({
         ...task,
-        deadline: task.deadline ? new Date(task.deadline).toISOString().split('T')[0] : ''
+        deadline: task.deadline ? new Date(task.deadline).toISOString().split('T')[0] : '',
+        assignedTo: task.assignedTo || '',
+        assignedToId: task.assignedToId || '',
       });
     }
   }, [task]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setIsChanged(true)
-    setFormData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
+    setIsChanged(true);
+    if (name === 'assignedTo') {
+      setFormData(prevData => ({
+        ...prevData,
+        assignedTo: value.name,
+        assignedToId: value.id,
+      }));
+    } else {
+      setFormData(prevData => ({
+        ...prevData,
+        [name]: value
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -62,16 +77,17 @@ const TaskForm = ({ task }) => {
     
     try {
       const currentUser = await getUserDetails(user.id);
+      const assignedUser = await getUserDetails(formData.assignedToId);
       const taskData = {
         ...formData,
+        assignedToId: assignedUser._id,
+        assignedTo: assignedUser.fullName,
         assignee: currentUser.fullName,
-        assignedTo: currentUser.fullName,
         createdBy: currentUser.fullName,
         createdById: currentUser._id,
         updatedBy: currentUser.fullName,  
         updatedById: currentUser._id,
         assigneeId: currentUser._id,
-        assignedToId: currentUser._id,
       };
 
       const url = task 
@@ -103,6 +119,8 @@ const TaskForm = ({ task }) => {
           deadline: '',
           priority: '',
           status: '',
+          assignedTo: '',
+          assignedToId: '', 
         });
       }
     } catch (error) {
@@ -247,6 +265,28 @@ const TaskForm = ({ task }) => {
           <MenuItem value="to-do">To-Do</MenuItem>
           <MenuItem value="ongoing">Ongoing</MenuItem>
           <MenuItem value="completed">Completed</MenuItem>
+        </Select>
+      </FormControl>
+
+      <FormControl fullWidth margin="normal">
+        <InputLabel>Assigned To</InputLabel>
+        <Select
+          name="assignedTo"
+          value={formData.assignedTo}
+          onChange={handleChange}
+          label="Assigned To"
+          renderValue={(selected) => selected}
+        >
+          <MenuItem value="">
+          </MenuItem>
+          {users.map((user) => (
+            <MenuItem key={user.id} value={{name: `${user.firstName} ${user.lastName}`, id: user.id}}>
+              <ListItemAvatar>
+                <Avatar src={user.imageUrl} alt={`${user.firstName} ${user.lastName}`} />
+              </ListItemAvatar>
+              <ListItemText primary={`${user.firstName} ${user.lastName}`} />
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
 

@@ -128,7 +128,7 @@ const App = () => {
         <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 8, backgroundColor: 'white' }}>
           <LoadingBar color="#f11946" ref={loadingBarRef} />
           {activeItem?.text === 'Dashboard' && <Dashboard tasks={tasks} handleLoading={handleLoading} />}
-          {activeItem?.text === 'Tasks' && <Tasks tasks={tasks} />}
+          {activeItem?.text === 'Tasks' && <Tasks tasks={tasks} users={users} />}
           {activeItem?.text === 'Team' && <Team users={users}/>}
         </Box>
         <NotificationStack messages={messages} />

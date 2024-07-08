@@ -5,7 +5,7 @@ import TaskCard from './TaskCard';
 
 
 
-const TaskGrid = ({ tasks }) => {
+const TaskGrid = ({ tasks, users}) => {
   const statuses = ['to-do', 'ongoing','completed'];
 
   return (
@@ -29,7 +29,7 @@ const TaskGrid = ({ tasks }) => {
           {tasks
             .filter((task) => task.status.toLowerCase() === status)
             .map((task) => (
-              <TaskCard key={task.id} task={task} />
+              <TaskCard key={task.id} task={task} users={users} />
             ))}
         </Grid>
       ))}

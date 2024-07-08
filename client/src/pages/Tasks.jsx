@@ -3,14 +3,14 @@ import { Container, Box, Alert } from '@mui/material';
 import AddNewTask from '../components/AddNewTask';
 import TaskGrid from '../components/TaskGrid';
 
-const Tasks = ({ tasks }) => {
+const Tasks = ({ tasks, users }) => {
 
   return (
     <Container>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', my: 2 }}>
-        <AddNewTask />
+        <AddNewTask users={users} />
       </Box>
-      <TaskGrid tasks={tasks} />
+      <TaskGrid tasks={tasks} users={users}/>
     </Container>
   );
 };
