@@ -1,8 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";    
-import { ClerkProvider, RedirectToSignIn, SignIn, SignUp, SignedIn, SignedOut } from "@clerk/clerk-react";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-react";
+import TaskManagerSignIn from "./pages/SignIn";
+import TaskManagerSignUp from "./pages/SignUp";
+import { BrowserRouter, Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import LandingPage from "./pages/LandingPage";
 
 if (!process.env.REACT_APP_CLERK_PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key");
@@ -18,27 +21,40 @@ const ClerkWithRoutes = () => {
     <ClerkProvider
       publishableKey={clerkPubKey}
       navigate={(to) => navigate(to)}
+      signOutUrl="/"
     >
       <Routes>
-        <Route path="/" element={<App />} />
+        <Route
+          path="/"
+          element={
+            <>
+              <SignedIn>
+                <Navigate to="/dashboard" replace />
+              </SignedIn>
+              <SignedOut>
+                <LandingPage />
+              </SignedOut>
+            </>
+          }
+        />
         <Route
           path="/sign-in/*"
-          element={<SignIn redirectUrl={'/protected'} routing="path" path="/sign-in" />}
+          element={<TaskManagerSignIn />}
         />
         <Route
           path="/sign-up/*"
-          element={<SignUp redirectUrl={'/protected'} routing="path" path="/sign-up" />}
+          element={<TaskManagerSignUp />}
         />
         <Route
           path="/dashboard"
           element={
             <>
-            <SignedIn>
-              <App />
-            </SignedIn>
-             <SignedOut>
-              <RedirectToSignIn />
-           </SignedOut>
+              <SignedIn>
+                <App />
+              </SignedIn>
+              <SignedOut>
+                <LandingPage />
+              </SignedOut>
             </>
           }
         />
