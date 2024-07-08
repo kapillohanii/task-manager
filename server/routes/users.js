@@ -1,11 +1,15 @@
 const router = require('express').Router();
 let User = require('../models/user.model');
+const { clerkClient } = require('@clerk/clerk-sdk-node');
+
+
+
 
 
 router.route('/all').get(async (req, res) => {
   try {
-    const users = await User.find();
-    res.json(users);
+    const users = await clerkClient.users.getUserList();
+    res.json(users.data);
   } catch (err) {
     res.status(400).json('Error: ' + err);
   }

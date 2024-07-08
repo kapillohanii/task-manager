@@ -80,4 +80,20 @@ export const fetchTasks = async (handleLoading) => {
   }
 };
 
+export const fetchUsers = async (handleLoading) => {
+  handleLoading(true)
+  try {
+    const response = await fetch('http://localhost:5000/user/all');
+    if (!response.ok) {
+      throw new Error('Failed to fetch users');
+    }
+    const data = await response.json();
+    handleLoading(false)
+    return data;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    handleLoading(false)
+    throw new Error(error.message);
+  }
+};
 

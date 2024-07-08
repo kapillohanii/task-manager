@@ -9,9 +9,9 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import PeopleIcon from '@mui/icons-material/People';
 import LoadingBar from 'react-top-loading-bar';
 import io from 'socket.io-client';
-import { fetchTasks } from './constants';
+import { fetchTasks, fetchUsers } from './constants';
 import NotificationStack from './components/NotificationStack';
-import AlgoliaSearch from './components/AlgoliaSearch';
+import Team from './pages/Team';
 
 const socket = io('http://localhost:5000');
 
@@ -41,6 +41,7 @@ const theme = createTheme({
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
+  const [users, setUsers] = useState([]);
   const [messages, setMessages] = useState([]);
 
   const addNotification = (message) => {
@@ -49,7 +50,7 @@ const App = () => {
   const menuItems = [
     { text: 'Dashboard', icon: <DashboardIcon /> },
     { text: 'Tasks', icon: <AssignmentIcon /> },
-    { text: 'Teams', icon: <PeopleIcon /> },
+    { text: 'Team', icon: <PeopleIcon /> },
   ];
   const [activeItem, setActiveItem] = useState(menuItems[0]);
   const loadingBarRef = useRef(null);
@@ -74,9 +75,18 @@ const App = () => {
       throw new Error(error.message);
     }
   }
+  async function refreshUsers() {
+    try {
+      const fetchedUsers = await fetchUsers(handleLoading);
+      setUsers(fetchedUsers);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
 
   useEffect(() => {
     refreshTasks();
+    refreshUsers();
   }, []);
 
   useEffect(() => {
@@ -119,7 +129,7 @@ const App = () => {
           <LoadingBar color="#f11946" ref={loadingBarRef} />
           {activeItem?.text === 'Dashboard' && <Dashboard tasks={tasks} handleLoading={handleLoading} />}
           {activeItem?.text === 'Tasks' && <Tasks tasks={tasks} />}
-          {activeItem?.text === 'Teams' && <></>}
+          {activeItem?.text === 'Team' && <Team users={users}/>}
         </Box>
         <NotificationStack messages={messages} />
       </Box>
