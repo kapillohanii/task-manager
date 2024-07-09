@@ -82,7 +82,7 @@ const TaskGrid = ({ tasks, users }) => {
     });
 
     return (
-      <div ref={dropRef} style={{ minHeight: '80vh', padding: '16px', border: '1px dashed #ccc' }}>
+      <div ref={dropRef} style={{ minHeight: '100%', padding: '16px', border: '1px dashed #ccc' }}>
         {children}
       </div>
     );

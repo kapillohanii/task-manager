@@ -21,7 +21,7 @@ const ClerkWithRoutes = () => {
     <ClerkProvider
       publishableKey={clerkPubKey}
       navigate={(to) => navigate(to)}
-      signOutUrl="/"
+      afterSignOutUrl="/"
     >
       <Routes>
         <Route

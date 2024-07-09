@@ -33,7 +33,7 @@ const TaskCard = ({ task, users }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const isOverdue = new Date(deadline) < new Date();
+  const isOverdue = (new Date(deadline) < new Date()) && status!="completed";
 
   return (
     <>

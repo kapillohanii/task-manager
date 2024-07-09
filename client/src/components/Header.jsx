@@ -20,6 +20,7 @@ const Header = ({ users }) => {
             <AlgoliaSearch users={users} />
           </Box>
           <UserButton
+            afterSignOutUrl="/"
             appearance={{
               elements: {
                 userButtonAvatarBox: {
