@@ -79,6 +79,12 @@ const TaskForm = ({ task, users }) => {
     try {
       const currentUser = await getUserDetails(user.id);
       const assignedUser = await getUserDetails(formData.assignedToId);
+
+      if (task && (currentUser._id !== task.createdById && currentUser._id !== task.assignedToId)){
+        showSnackbar('Action not permitted!', 'error')
+        return
+      }
+
       const taskData = {
         ...formData,
         assignedToId: assignedUser._id,
@@ -135,6 +141,10 @@ const TaskForm = ({ task, users }) => {
 
     try {
       const currentUser = await getUserDetails(user.id);
+      if (currentUser._id !== task.createdById){
+        showSnackbar('Action not permitted!', 'error')
+        return
+      }
       const taskData = {
         ...task,
         updatedBy: currentUser.fullName,
@@ -171,7 +181,7 @@ const TaskForm = ({ task, users }) => {
           clearInterval(timer);
           return 0;
         }
-        const diff = oldProgress - 2;
+        const diff = oldProgress - 5;
         return Math.max(diff, 0);
       });
     }, 100);

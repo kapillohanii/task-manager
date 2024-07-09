@@ -5,7 +5,7 @@ import TaskCard from './TaskCard';
 const DraggableTaskCard = ({ task, users }) => {
   const [, dragRef] = useDrag({
     type: 'TASK',
-    item: { id: task._id, status: task.status },
+    item: task,
   });
 
   return (

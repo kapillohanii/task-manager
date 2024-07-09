@@ -9,9 +9,10 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import PeopleIcon from '@mui/icons-material/People';
 import LoadingBar from 'react-top-loading-bar';
 import io from 'socket.io-client';
-import { fetchTasks, fetchUsers, serverEndpoint } from './constants';
+import { fetchTasks, fetchUsers, getUserDetails, serverEndpoint } from './constants';
 import NotificationStack from './components/NotificationStack';
 import Team from './pages/Team';
+import { useUser } from '@clerk/clerk-react';
 
 
 const socket = io(`${serverEndpoint}`);
@@ -44,6 +45,9 @@ const App = () => {
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
   const [messages, setMessages] = useState([]);
+
+  const {user} = useUser();
+  let currentUser;
 
   const addNotification = (message) => {
     setMessages(prev => [...prev, message]);
@@ -78,6 +82,7 @@ const App = () => {
   }
   async function refreshUsers() {
     try {
+      currentUser = await getUserDetails(user.id);
       const fetchedUsers = await fetchUsers(handleLoading);
       setUsers(fetchedUsers);
     } catch (error) {
@@ -95,20 +100,24 @@ const App = () => {
       const truncatedTitle = task.title.length > 10 
       ? task.title.substr(0, 10) + '...' 
       : task.title;
-      addNotification(`${task.createdBy} created task [${truncatedTitle}]`);
+
+      const who = task.createdById === currentUser._id ? 'You' : task.createdBy;
+      addNotification(`${who} created task [${truncatedTitle}]`);
       refreshTasks();
     });
     socket.on('taskUpdated', (task) => {
       const truncatedTitle = task.title.length > 10 
       ? task.title.substr(0, 10) + '...' 
       : task.title;
-      addNotification(`${task.updatedBy} updated task [${truncatedTitle}]`);
+      const who = task.updatedById === currentUser._id ? 'You' : task.updatedBy;
+      addNotification(`${who} updated task [${truncatedTitle}]`);
       refreshTasks();
     });
     socket.on('taskDeleted', (task) => {
       const truncatedTitle = task.title.length > 10 
       ? task.title.substr(0, 10) + '...' 
       : task.title;
+      const who = task.createdById === currentUser._id ? 'You' : task.createdBy;
       addNotification(`${task.updatedBy} deleted task [${truncatedTitle}]`);
       refreshTasks();
     });
