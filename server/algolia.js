@@ -19,6 +19,9 @@ async function indexDataToAlgolia() {
     const algoliaClient = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_ADMIN_API_KEY);
     const index = algoliaClient.initIndex(ALGOLIA_INDEX_NAME);
 
+    await index.clearObjects();
+    console.log('Existing index cleared');
+
     const algoliaObjects = documents.map(doc => ({
       objectID: doc._id.toString(),
       ...doc

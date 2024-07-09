@@ -98,7 +98,7 @@ router.route('/delete/:id').delete(async (req, res) => {
       return res.status(404).json('Task not found');
     }
     socket.getIO().emit('taskDeleted', taskData);
-    await indexDataToAlgolia(); // Index after deleting a task
+    await indexDataToAlgolia();
     res.json(`Task with id: ${req.params.id} deleted`);
   } catch (err) {
     res.status(400).json('Error: ' + err);

@@ -22,11 +22,20 @@ router.route('/profile/:id').get((req, res) => {
       if (user) {
         res.json(user);
       } else {
-        res.status(404).json('User not found');
+        User.findById(id)
+          .then(user => {
+            if (user) {
+              res.json(user);
+            } else {
+              res.status(404).json('User not found');
+            }
+          })
+          .catch(err => res.status(400).json('Error: ' + err));
       }
     })
     .catch(err => res.status(400).json('Error: ' + err));
 });
+
 
 router.route('/create').post(async (req, res) => {
   const { clerkId, email, fullName } = req.body;
