@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Box, CssBaseline, ThemeProvider, createTheme, GlobalStyles } from '@mui/material';
 import Header from './components/Header';
 import Navigation from './components/Navigation'; 
-import Dashboard from './pages/Dashboard';
+import Overview from './pages/Overview';
 import Tasks from './pages/Tasks';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AssignmentIcon from '@mui/icons-material/Assignment';
@@ -49,7 +49,7 @@ const App = () => {
     setMessages(prev => [...prev, message]);
   };
   const menuItems = [
-    { text: 'Dashboard', icon: <DashboardIcon /> },
+    { text: 'Overview', icon: <DashboardIcon /> },
     { text: 'Tasks', icon: <AssignmentIcon /> },
     { text: 'Team', icon: <PeopleIcon /> },
   ];
@@ -128,7 +128,7 @@ const App = () => {
         <Navigation menuItems={menuItems} activeItem={activeItem} handleNavigation={handleNavigation} />
         <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 8, backgroundColor: 'white' }}>
           <LoadingBar color="#f11946" ref={loadingBarRef} />
-          {activeItem?.text === 'Dashboard' && <Dashboard tasks={tasks} handleLoading={handleLoading} />}
+          {activeItem?.text === 'Overview' && <Overview tasks={tasks} handleLoading={handleLoading} />}
           {activeItem?.text === 'Tasks' && <Tasks tasks={tasks} users={users} />}
           {activeItem?.text === 'Team' && <Team users={users}/>}
         </Box>

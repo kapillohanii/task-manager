@@ -5,7 +5,7 @@ import {useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { serverEndpoint } from '../constants';
 
-const Dashboard = ({tasks, handleLoading}) => {
+const Overview = ({tasks, handleLoading}) => {
     const { user } = useUser();
     useEffect(() => {
         const checkUser = async () => {
@@ -59,4 +59,4 @@ const Dashboard = ({tasks, handleLoading}) => {
     );
 }
 
-export default Dashboard;
+export default Overview;
