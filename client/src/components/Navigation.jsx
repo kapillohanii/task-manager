@@ -58,8 +58,8 @@ const Navigation = ({ menuItems, activeItem, handleNavigation }) => {
           onClick={toggleDrawer}
           sx={{ 
             position: 'fixed',
-            left: 20,
-            bottom: 20,
+            left: '10px',
+            bottom: '10px',
             zIndex: theme.zIndex.drawer + 2,
           }}
         >
