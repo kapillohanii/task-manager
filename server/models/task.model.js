@@ -5,20 +5,17 @@ const Schema = mongoose.Schema;
 const taskSchema = new Schema({
   title: {
     type: String,
-    required: true,
-    minlength: 5
+    required: true
   },
   status: {
     type: String,
     required: true,
-    trim: true,
-    minlength: 3
+    trim: true
   },
   priority: {
     type: String,
     required: true,
-    trim: true,
-    minlength: 3
+    trim: true
   },
   description: {
     type: String,
