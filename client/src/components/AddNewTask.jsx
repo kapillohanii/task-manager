@@ -11,7 +11,6 @@ const style = {
   maxWidth: '80vw',
   maxHeight: '90vh',
   bgcolor: 'background.paper',
-  border: '2px solid #000',
   boxShadow: 24,
   p: 4,
 

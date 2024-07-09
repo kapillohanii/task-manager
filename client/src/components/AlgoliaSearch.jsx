@@ -12,17 +12,15 @@ const searchClient = algoliasearch(
 );
 
 const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  maxWidth: '80vw',
-  maxHeight: '90vh',
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  overflow: 'auto',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    maxWidth: '80vw',
+    maxHeight: '90vh',
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
 };
 
 function Hit({ hit, onTaskSelect }) {
@@ -40,7 +38,7 @@ function Hit({ hit, onTaskSelect }) {
 
 const CustomHits = connectHits(({ hits, onTaskSelect }) => {
     return (
-        <Paper elevation={3} style={{ marginTop: '10px', maxHeight: '300px', overflowY: 'auto', position:'fixed', width:'100%'}}>
+        <Paper elevation={3} style={{ marginTop: '10px', maxHeight: '300px', overflowY: 'auto', position: 'fixed', width: '100%' }}>
             <List sx={{ p: 0 }}>
                 {hits.slice(0, 3).map(hit => (
                     <ListItem key={hit.objectID} style={{ padding: '10px', cursor: 'pointer' }}>
