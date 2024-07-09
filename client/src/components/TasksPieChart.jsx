@@ -1,29 +1,33 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Box } from '@mui/material';
+import { Box, useMediaQuery, useTheme } from '@mui/material';
 import { getColorByStatus, getHoverColorByStatus } from '../constants';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const TasksPieChart = ({tasks}) => {
-  const todoCount = tasks.filter(task => task.status==='to-do').length;
-  const ongoingCount = tasks.filter(task => task.status==='ongoing').length;
-  const completedCount = tasks.filter(task => task.status==='completed').length;
+const TasksPieChart = ({ tasks }) => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const todoCount = tasks.filter(task => task.status === 'to-do').length;
+  const ongoingCount = tasks.filter(task => task.status === 'ongoing').length;
+  const completedCount = tasks.filter(task => task.status === 'completed').length;
   const taskTypes = [
     {
       label: 'To-Do',
-      count: todoCount
+      count: todoCount,
     },
     {
       label: 'Ongoing',
-      count: ongoingCount
+      count: ongoingCount,
     },
     {
       label: 'Completed',
-      count: completedCount
-    }
-  ]
+      count: completedCount,
+    },
+  ];
+
   const data = {
     labels: taskTypes.map(type => type.label),
     datasets: [
@@ -44,7 +48,7 @@ const TasksPieChart = ({tasks}) => {
       },
       tooltip: {
         callbacks: {
-          label: function(context) {
+          label: function (context) {
             let label = context.label || '';
             if (label) {
               label += ': ';
@@ -53,18 +57,20 @@ const TasksPieChart = ({tasks}) => {
               label += context.parsed;
             }
             return label;
-          }
-        }
-      }
+          },
+        },
+      },
     },
   };
 
   return (
-    <Box sx={{ 
-      width: 500, 
-      height: 400, 
-      p: 2,
-    }}>
+    <Box
+      sx={{
+        width: isSmallScreen ? '100%' : 350,
+        height: isSmallScreen ? 250 : 350,
+        p: 2,
+      }}
+    >
       <Pie data={data} options={options} />
     </Box>
   );

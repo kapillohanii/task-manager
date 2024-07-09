@@ -1,21 +1,20 @@
 import React from 'react';
 import { Card, CardContent, Typography, Box } from '@mui/material';
-import {getColorByStatus} from '../constants'
+import { getColorByStatus } from '../constants';
 
 const TasksCountCard = ({ status, count }) => {
-
   const color = getColorByStatus(status);
 
   return (
-    <Card sx={{ minWidth: 250, m: 2 }}>
+    <Card sx={{ minWidth: 200, m: 1 }}>
       <CardContent>
-        <Typography variant="h3" component="div" sx={{ fontWeight: 'bold', mb: 2 }}>
+        <Typography variant="h4" component="div" sx={{ fontWeight: 'bold', mb: 1 }}>
           {count}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Box
             sx={{
-              width: 15,  
+              width: 15,
               height: 15,
               borderRadius: '50%',
               backgroundColor: color,

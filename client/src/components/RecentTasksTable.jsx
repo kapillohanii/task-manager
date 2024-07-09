@@ -13,12 +13,16 @@ import {
   Button,
   ButtonGroup,
   Box,
-  Tooltip
+  Tooltip,
+  useMediaQuery,
+  useTheme
 } from '@mui/material';
 import { getColorByStatus, getPriorityIcon } from '../constants';
 
 const RecentTasksTable = ({ tasks }) => {
   const [sortBy, setSortBy] = useState('added');
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleSort = (option) => {
     setSortBy(option);
@@ -39,12 +43,12 @@ const RecentTasksTable = ({ tasks }) => {
   const recentTasks = getSortedTasks();
 
   return (
-    <TableContainer component={Paper} style={{ marginLeft: '20px', padding: '20px' }}>
-      <Box display="flex" justifyContent="space-between" alignItems="center">
+    <TableContainer component={Paper} sx={{ marginLeft: isSmallScreen ? '0' : '20px', padding: '20px' }}>
+      <Box display="flex" flexDirection={isSmallScreen ? 'column' : 'row'} justifyContent="space-between" alignItems="center">
         <Typography variant="h6" component="div">
           Recent Tasks
         </Typography>
-        <ButtonGroup aria-label="sort by button group">
+        <ButtonGroup aria-label="sort by button group" sx={{ marginTop: isSmallScreen ? 2 : 0 }}>
           <Button
             onClick={() => handleSort('added')}
             variant={sortBy === 'added' ? 'contained' : 'outlined'}
