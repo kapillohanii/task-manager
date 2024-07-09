@@ -1,12 +1,41 @@
 import React from 'react';
-import { Grid, Box, Typography, Card, CardContent, Chip, Avatar, Divider } from '@mui/material';
-import { getColorByStatus } from '../constants';
-import TaskCard from './TaskCard';
+import { Grid, Box, Typography } from '@mui/material';
+import { getColorByStatus, getUserDetails } from '../constants';
+import { useDrop } from 'react-dnd';
+import DraggableTaskCard from './DraggableTaskCard';
+import axios from 'axios';
+import { serverEndpoint } from '../constants';
+import { useUser } from '@clerk/clerk-react';
 
+const TaskGrid = ({ tasks, users }) => {
+  const {user} = useUser()
+  const statuses = ['to-do', 'ongoing', 'completed'];
 
+  const updateTaskStatus = async (id, status) => {
+    try {
+      const currentUser = await getUserDetails(user.id)
+      await axios.put(`${serverEndpoint}/task/update/${id}`, { status, updatedBy: currentUser.fullName, updatedById: currentUser._id });
+    } catch (error) {
+      console.error('Failed to update task status:', error);
+    }
+  };
 
-const TaskGrid = ({ tasks, users}) => {
-  const statuses = ['to-do', 'ongoing','completed'];
+  const DropZone = ({ status, children }) => {
+    const [, dropRef] = useDrop({
+      accept: 'TASK',
+      drop: (item) => {
+        if (item.status !== status) {
+          updateTaskStatus(item.id, status);
+        }
+      },
+    });
+
+    return (
+      <div ref={dropRef} style={{ minHeight: '80vh', padding: '16px', border: '1px dashed #ccc' }}>
+        {children}
+      </div>
+    );
+  };
 
   return (
     <Grid container spacing={2}>
@@ -26,11 +55,13 @@ const TaskGrid = ({ tasks, users}) => {
               {status.charAt(0).toUpperCase() + status.slice(1)}
             </Typography>
           </Box>
-          {tasks
-            .filter((task) => task.status.toLowerCase() === status)
-            .map((task) => (
-              <TaskCard key={task.id} task={task} users={users} />
-            ))}
+          <DropZone status={status}>
+            {tasks
+              .filter((task) => task.status.toLowerCase() === status)
+              .map((task) => (
+                <DraggableTaskCard key={task._id} task={task} users={users} />
+              ))}
+          </DropZone>
         </Grid>
       ))}
     </Grid>

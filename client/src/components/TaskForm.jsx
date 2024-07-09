@@ -210,7 +210,7 @@ const TaskForm = ({ task, users }) => {
       <TextField
         fullWidth
         margin="normal"
-        label="Task Title"
+        label="Title"
         name="title"
         value={formData.title}
         onChange={handleChange}
