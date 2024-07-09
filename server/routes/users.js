@@ -30,7 +30,13 @@ router.route('/profile/:id').get((req, res) => {
               res.status(404).json('User not found');
             }
           })
-          .catch(err => res.status(400).json('Error: ' + err));
+          .catch(err => {
+            if (err.name === 'CastError') {
+              res.status(404).json('User not found');
+            } else {
+              res.status(400).json('Error: ' + err);
+            }
+          });
       }
     })
     .catch(err => res.status(400).json('Error: ' + err));

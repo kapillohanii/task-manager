@@ -9,7 +9,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import PeopleIcon from '@mui/icons-material/People';
 import LoadingBar from 'react-top-loading-bar';
 import io from 'socket.io-client';
-import { fetchTasks, fetchUsers, getUserDetails, serverEndpoint } from './constants';
+import { checkUser, fetchTasks, fetchUsers, getUserDetails, serverEndpoint } from './constants';
 import NotificationStack from './components/NotificationStack';
 import Team from './pages/Team';
 import { useUser } from '@clerk/clerk-react';
@@ -82,7 +82,10 @@ const App = () => {
   }
   async function refreshUsers() {
     try {
-      currentUser = await getUserDetails(user.id);
+      if(!currentUser){
+        await checkUser(user,handleLoading);
+        currentUser = await getUserDetails(user.id);
+      }
       const fetchedUsers = await fetchUsers(handleLoading);
       setUsers(fetchedUsers);
     } catch (error) {
