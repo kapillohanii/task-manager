@@ -8,7 +8,7 @@ import {
 import { UserButton } from "@clerk/clerk-react"
 import AlgoliaSearch from './AlgoliaSearch';
 
-const Header = () => {
+const Header = ({users}) => {
   return (
     <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, boxShadow: (theme) => theme.shadows[4] }}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -17,7 +17,7 @@ const Header = () => {
         </Typography>
         <Box sx={{display:'flex', justifyContent:'space-between', width:'max-width'}}>
           <Box sx={{ flexGrow: 1, mx: 2, maxWidth: '600px' }}>
-            <AlgoliaSearch />
+            <AlgoliaSearch users={users} />
           </Box>
           <UserButton />
         </Box>

@@ -124,7 +124,7 @@ const App = () => {
       <GlobalStyles styles={scrollbarStyles} />
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
-        <Header />
+        <Header users={users} />
         <Navigation menuItems={menuItems} activeItem={activeItem} handleNavigation={handleNavigation} />
         <Box component="main" sx={{ flexGrow: 1, p: 3, pt: 8, backgroundColor: 'white' }}>
           <LoadingBar color="#f11946" ref={loadingBarRef} />
